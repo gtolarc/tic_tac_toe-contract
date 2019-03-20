@@ -51,7 +51,6 @@ bool is_valid_movement(const uint16_t& row, const uint16_t& column, const vector
 
 name get_winner(const tic_tac_toe::game& current_game) {
     auto& board = current_game.board;
-
     bool is_board_full = true;
 
     // Use bitwise AND operator to determine the consecutive values of each column, row and diagonal
@@ -89,6 +88,7 @@ name get_winner(const tic_tac_toe::game& current_game) {
             return current_game.challenger;
         }
     }
+
     // Draw if the board is full, otherwise the winner is not determined yet
     return is_board_full ? "draw"_n : "none"_n;
 }
@@ -99,13 +99,9 @@ ACTION tic_tac_toe::move(name challenger, name host, name by, const uint16_t row
     games existing_host_games(_self, host.value);
     auto itr = existing_host_games.find(challenger.value);
     eosio_assert(itr != existing_host_games.end(), "move: game doesn't exists");
-
     eosio_assert(itr->winner == "none"_n, "move: the game has ended!");
-
     eosio_assert(by == itr->host || by == itr->challenger, "move: this is not your game!");
-
     eosio_assert(by == itr->turn, "move: it's not your turn yet!");
-
     eosio_assert(is_valid_movement(row, column, itr->board), "move: not a valid movement!");
 
     const uint8_t cell_value = itr->turn == itr->host ? 1 : 2;
