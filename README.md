@@ -1,5 +1,5 @@
-tic_tac_toe-contract
-====================
+tic tac toe - contract
+======================
 
 ## Purpose
 
