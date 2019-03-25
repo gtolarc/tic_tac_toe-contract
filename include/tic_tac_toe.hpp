@@ -1,11 +1,10 @@
-#include <eosiolib/eosio.hpp>
+#include <eosio/eosio.hpp>
 
 using namespace eosio;
-using namespace std;
 
 CONTRACT tic_tac_toe : public contract {
    public:
-    tic_tac_toe(name receiver, name code, datastream<const char*> ds) : contract(receiver, code, ds) {}
+    tic_tac_toe(name self, name first_receiver, datastream<const char*> ds) : contract(self, first_receiver, ds) {}
 
     ACTION create(name challenger, name host);
     ACTION restart(name challenger, name host, name by);
@@ -21,9 +20,9 @@ CONTRACT tic_tac_toe : public contract {
         name host;
         name turn;
         name winner = "none"_n;
-        vector<uint8_t> board;
+        std::vector<uint8_t> board;
 
-        void initialize_board() { board = vector<uint8_t>(board_width * board_height, 0); }
+        void initialize_board() { board = std::vector<uint8_t>(board_width * board_height, 0); }
 
         void reset_game() {
             initialize_board();
@@ -38,6 +37,7 @@ CONTRACT tic_tac_toe : public contract {
 
     typedef eosio::multi_index<"games"_n, game> games;
 
+   private:
     using create_action = action_wrapper<"create"_n, &tic_tac_toe::create>;
     using restart_action = action_wrapper<"restart"_n, &tic_tac_toe::restart>;
     using close_action = action_wrapper<"close"_n, &tic_tac_toe::close>;
